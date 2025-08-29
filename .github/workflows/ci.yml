@@ -50,9 +50,11 @@ jobs:
       - name: Copy lockfile to root for Cypress
         run: cp package-lock.json ../package-lock.json
 
+      - name: Start frontend dev server
+        run: npm run dev &
+
+      - name: Wait for frontend to be ready
+        run: npx wait-on http://localhost:5173
+
       - name: Run Cypress E2E tests
-        uses: cypress-io/github-action@v5
-        with:
-          start: npm run dev
-          wait-on: http://localhost:5173
-          wait-on-timeout: 60
+        run: npx cypress run
